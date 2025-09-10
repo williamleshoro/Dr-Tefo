@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Tefo's Traditional Healing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2e7d32;
+            --secondary: #4caf50;
+            --accent: #ff9800;
+            --light: #f8f8f8;
+            --dark: #333;
+            --shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .logo-icon {
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+        
+        /* Mobile Menu Button */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 30px;
+            height: 25px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        
+        .menu-toggle span {
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.2rem;
+        }
+        
+        nav a {
+            color: white;
+            font-weight: 500;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 4rem 1rem;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover {
+            background-color: #e65100;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        /* Sections */
+        section {
+            padding: 3rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 0.8rem;
+            font-size: 1.8rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+        
+        /* About Section */
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .about-text {
+            flex: 1;
+            min-width: 100%;
+        }
+        
+        .about-text p {
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+        
+        .about-image {
+            flex: 1;
+            min-width: 100%;
+            height: 250px;
+            background-color: #e8f5e9;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5rem;
+            color: var(--secondary);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        /* Products Section */
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-image {
+            height: 180px;
+            background-color: #e8f5e9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: var(--secondary);
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-info h3 {
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+        
+        .product-info p {
+            margin-bottom: 1rem;
+            flex-grow: 1;
+            font-size: 0.95rem;
+        }
+        
+        .product-price {
+            font-weight: bold;
+            color: var(--accent);
+            margin: 0.8rem 0;
+            font-size: 1.2rem;
+        }
+        
+        .contact-btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.7rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+        }
+        
+        .contact-btn:hover {
+            background-color: var(--secondary);
+        }
+        
+        /* Testimonials */
+        .testimonials-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .testimonial {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .testimonial::before {
+            content: counter(name);
+            font-size: 4rem;
+            color: var(--secondary);
+            opacity: 0.2;
+            position: absolute;
+            top: -20px;
+            left: 10px;
+            font-family: Georgia, serif;
+        }
+        
+        /* Contact Section */
+        .contact-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .contact-info, .contact-form {
+            min-width: 100%;
+        }
+        
+        .contact-info {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+        
+        .contact-info h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+        }
+        
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+        
+        .contact-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: var(--accent);
+        }
+        
+        .contact-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+        
+        .contact-form h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-size: 1.4rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 2.5rem 0 1.5rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section {
+            min-width: 100%;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1.2rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-section p {
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.2rem;
+        }
+        
+        .social-icon {
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+            color: white;
+        }
+        
+        .social-icon:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            margin-top: 2rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design for Tablets */
+        @media (min-width: 768px) {
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .about-content {
+                flex-direction: row;
+            }
+            
+            .about-text, .about-image {
+                min-width: calc(50% - 1rem);
+            }
+            
+            .about-image {
+                height: 300px;
+                font-size: 6rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .testimonials-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .testimonial {
+                flex: 1;
+                min-width: calc(50% - 1rem);
+            }
+            
+            .contact-container {
+                flex-direction: row;
+            }
+            
+            .contact-info, .contact-form {
+                min-width: calc(50% - 1rem);
+            }
+            
+            .footer-content {
+                flex-direction: row;
+            }
+            
+            .footer-section {
+                min-width: calc(33.333% - 1rem);
+            }
+        }
+        
+        /* Responsive Design for Desktops */
+        @media (min-width: 1024px) {
+            .container {
+                padding: 0 20px;
+            }
+            
+            .hero {
+                padding: 6rem 1rem;
+            }
+            
+            .hero h2 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.3rem;
+            }
+            
+            section {
+                padding: 4rem 0;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+            }
+            
+            .product-image {
+                height: 200px;
+                font-size: 4rem;
+            }
+            
+            .testimonial {
+                min-width: calc(33.333% - 1.5rem);
+            }
+            
+            .about-image {
+                height: 350px;
+                font-size: 8rem;
+            }
+        }
+        
+        /* Mobile Menu Styles */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+            
+            nav {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+                transition: all 0.3s ease;
+                box-shadow: var(--shadow);
+                z-index: 999;
+            }
+            
+            nav.active {
+                left: 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+            }
+            
+            nav a {
+                display: block;
+                padding: 1rem;
+                font-size: 1.1rem;
+            }
+            
+            /* Toggle menu animation */
+            .menu-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+            
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .menu-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon"><i class="fas fa-leaf"></i></span>
+                    <h1>Doctor Tefo's Healing</h1>
+                </div>
+                <button class="menu-toggle" id="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <nav id="nav">
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Natural Healing with Doctor Tefo</h2>
+                <p>Discover the power of traditional medicine with our carefully crafted natural remedies for holistic wellness.</p>
+                <a href="#contact" class="btn">Contact for Consultation</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- About Section -->
+        <section id="about">
+            <h2 class="section-title">About Doctor Tefo</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Doctor Tefo is a renowned traditional healer with over 20 years of experience in natural medicine. Trained by elders in the ancient arts of healing, Doctor Tefo combines time-honored techniques with modern understanding of holistic wellness.</p>
+                    <p>Our products are made from ethically sourced natural ingredients, prepared with care and respect for traditional methods. Each remedy is crafted to address specific health concerns while promoting overall well-being.</p>
+                    <p>Doctor Tefo believes in the healing power of nature and is committed to providing accessible traditional medicine to help people live healthier, more balanced lives.</p>
+                    <a href="#contact" class="btn">Schedule a Consultation</a>
+                </div>
+                <div class="about-image">
+                    <i class="fas fa-spa"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products">
+            <h2 class="section-title">Our Traditional Products</h2>
+            <div class="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>Stress Relief Tonic</h3>
+                        <p>A powerful blend of herbs to calm the mind and reduce anxiety. Made from organic ingredients sourced from local growers.</p>
+                        <p class="product-price">R120.00</p>
+                        <a href="#contact" class="contact-btn">Inquire About This Product</a>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>Immune Booster</h3>
+                        <p>Strengthen your body's natural defenses with this herbal formula. Contains powerful antioxidants and immune-supporting herbs.</p>
+                        <p class="product-price">R150.00</p>
+                        <a href="#contact" class="contact-btn">Inquire About This Product</a>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>Sleep Elixir</h3>
+                        <p>Natural remedy to promote restful sleep and combat insomnia. Gently relaxes the nervous system without side effects.</p>
+                        <p class="product-price">R135.00</p>
+                        <a href="#contact" class="contact-btn">Inquire About This Product</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials">
+            <h2 class="section-title">Customer Testimonials</h2>
+            <div class="testimonials-container">
+                <div class="testimonial">
+                    <p class="testimonial-text">"Doctor Tefo's Immune Booster helped me get through winter without getting sick even once. Highly recommended!"</p>
+                    <p class="testimonial-author">- Sarah M., Pretoria</p>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-text">"The Stress Relief Tonic has been life-changing. I feel more balanced and able to handle daily pressures."</p>
+                    <p class="testimonial-author">- James K., Johannesburg</p>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-text">"After years of struggling with insomnia, Doctor Tefo's Sleep Elixir finally helped me get the rest I need."</p>
+                    <p class="testimonial-author">- Linda B., Cape Town</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <h2 class="section-title">Contact Doctor Tefo</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Get In Touch</h3>
+                    <div class="contact-detail">
+                        <span class="contact-icon"><i class="fas fa-phone"></i></span>
+                        <span>+27 12 345 6789</span>
+                    </div>
+                    <div class="contact-detail">
+                        <span class="contact-icon"><i class="fas fa-envelope"></i></span>
+                        <span>info@doctortefo.co.za</span>
+                    </div>
+                    <div class="contact-detail">
+                        <span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
+                        <span>123 Healing Street, Pretoria, South Africa</span>
+                    </div>
+                    <div class="contact-detail">
+                        <span class="contact-icon"><i class="fas fa-clock"></i></span>
+                        <span>Mon-Fri: 9AM-5PM | Sat: 9AM-1PM</span>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook social-icon"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp social-icon"></i></a>
+                        <a href="#"><i class="fab fa-instagram social-icon"></i></a>
+                        <a href="#"><i class="fab fa-twitter social-icon"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3>Send a Message</h3>
+                    <form id="message-form">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="interest">Product Interest</label>
+                            <select id="interest">
+                                <option value="">Select a product</option>
+                                <option value="stress-relief">Stress Relief Tonic</option>
+                                <option value="immune-booster">Immune Booster</option>
+                                <option value="sleep-elixir">Sleep Elixir</option>
+                                <option value="consultation">General Consultation</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Doctor Tefo's Healing</h3>
+                    <p>Traditional medicine for modern wellness</p>
+                </div>
+                 <nav id="nav">
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="footer-section">
+                    <h3>Location</h3>
+                    <p>123 Healing Street</p>
+                    <p>Pretoria, South Africa</p>
+                    <p>+27 12 345 6789</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Doctor Tefo's Traditional Healing. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        const menuToggle = document.getElementById('menu-toggle');
+        const nav = document.getElementById('nav');
+        
+        menuToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                menuToggle.classList.remove('active');
+            });
+        });
+        
+        // Form submission handling
+        const contactForm = document.getElementById('message-form');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const interest = document.getElementById('interest').value;
+            
+            // Show confirmation message
+            alert(`Thank you ${name}! Your message has been sent. Doctor Tefo will contact you at ${email} soon regarding your interest in ${interest || 'general consultation'}.`);
+            
+            // Reset form
+            contactForm.reset();
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a, .btn[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
