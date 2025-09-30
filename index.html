@@ -605,6 +605,25 @@
                 transform: rotate(-45deg) translate(7px, -6px);
             }
         }
+
+
+         /* Internal CSS */
+    html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:#f6f7fb; }
+    .container { display: flex; flex-direction: column; height: 100vh; }
+    header { padding: 12px 16px; background: white; box-shadow: 0 1px 4px rgba(16,24,40,0.06); display:flex; align-items:center; gap:12px; }
+    header h1 { margin: 0; font-size: 16px; }
+    header p { margin: 0; color: #6b7280; font-size: 13px; }
+    #map { flex: 1; min-height: 200px; }
+    .controls { padding: 10px 16px; background: #fff; display:flex; gap:8px; align-items:center; border-top:1px solid #eef2f7; }
+    .controls input[type="text"] { padding:8px 10px; border:1px solid #d1d5db; border-radius:6px; width: 420px; max-width: calc(100% - 120px); }
+    .controls button { padding:8px 12px; border-radius:6px; border:1px solid #1118271a; background:#1118270f; cursor:pointer; }
+    .info { font-size:13px; color:#374151; }
+    .small { font-size:12px; color:#6b7280; }
+    @media (max-width:640px){
+      header h1 { font-size:14px; }
+      .controls input[type="text"] { width: 100%; }
+      .controls { flex-direction: column; align-items:stretch; gap:6px; }
+    }
     </style>
 </head>
 <body>
@@ -756,39 +775,30 @@
                         <a href="#"><i class="fab fa-twitter social-icon"></i></a>
                     </div>
                 </div>
-                <div class="contact-form">
-                    <h3>Send a Message</h3>
-                    <form id="message-form">
-                        <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone">
-                        </div>
-                        <div class="form-group">
-                            <label for="interest">Product Interest</label>
-                            <select id="interest">
-                                <option value="">Select a product</option>
-                                <option value="stress-relief">Stress Relief Tonic</option>
-                                <option value="immune-booster">Immune Booster</option>
-                                <option value="sleep-elixir">Sleep Elixir</option>
-                                <option value="consultation">General Consultation</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" required></textarea>
-                        </div>
-                        <button type="submit" class="btn" style="width: 100%;">Send Message</button>
-                    </form>
-                </div>
-            </div>
+
+
+                <div class="container">
+    <header>
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" style="flex-shrink:0">
+        <path d="M12 2C8 2 4 6 4 10.5c0 5.6 8 11.5 8 11.5s8-5.9 8-11.5C20 6 16 2 12 2z" fill="#10B981"/>
+        <circle cx="12" cy="9" r="2.5" fill="white"/>
+      </svg>
+      <div>
+        <h1>Map — 2030 U section, Botshabelo-E, Botshabelo 9781</h1>
+        <p class="small">Interactive map (Leaflet + OpenStreetMap). Geocodes the address then centers the map.</p>
+      </div>
+    </header>
+
+    <div id="map"></div>
+
+    <div class="controls">
+      <input id="address" type="text" value="2030 U section, Botshabelo-E, Botshabelo, 9781, South Africa" />
+      <button id="go">Find / Recenter</button>
+      <div style="flex:1"></div>
+      <div class="info" id="status">Status: idle</div>
+    </div>
+  </div>       
+        
         </section>
     </div>
 
@@ -872,5 +882,101 @@
             });
         });
     </script>
-</body>
+
+
+    <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1j8gY1F2xF8s2t1rW3JvQKkQ+4e6w6bAtc9o3Jz0="
+    crossorigin=""
+  ></script>
+
+  <script>
+    // Basic Leaflet map setup
+    const map = L.map('map', { zoomControl: true }).setView([ -29.15, 26.80 ], 13); // temporary center
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Marker group
+    const markerGroup = L.layerGroup().addTo(map);
+
+    // Helper: update status text
+    const statusEl = document.getElementById('status');
+    function setStatus(s){ statusEl.textContent = 'Status: ' + s; }
+
+    // Geocode with Nominatim and place marker
+    async function geocodeAndShow(address) {
+      markerGroup.clearLayers();
+      setStatus('geocoding...');
+      // Construct Nominatim query (limit 1)
+      const q = encodeURIComponent(address);
+      const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${q}&addressdetails=1&accept-language=en`;
+      try {
+        const resp = await fetch(url, { method: 'GET' });
+        if (!resp.ok) throw new Error('Geocoding request failed: ' + resp.status);
+        const data = await resp.json();
+        if (!data || data.length === 0) {
+          setStatus('location not found');
+          alert('Address not found. Try editing the address or zooming into the area manually.');
+          return;
+        }
+        const place = data[0];
+        const lat = parseFloat(place.lat);
+        const lon = parseFloat(place.lon);
+        // Place marker and popup
+        const marker = L.marker([lat, lon], {title: place.display_name}).addTo(markerGroup);
+        const popupHtml = `
+          <div style="font-size:14px"><strong>Resolved location</strong></div>
+          <div style="margin-top:6px">${place.display_name}</div>
+          <div style="margin-top:8px; font-size:12px; color:#6b7280">lat: ${lat.toFixed(6)} lon: ${lon.toFixed(6)}</div>
+          <div style="margin-top:8px"><button id="directionsBtn" style="padding:6px 8px; border-radius:5px; cursor:pointer">Open directions (OSM)</button></div>
+        `;
+        marker.bindPopup(popupHtml).openPopup();
+        map.setView([lat, lon], 17);
+        setStatus('centered on resolved location');
+
+        // attach click handler for directions button after popup opens
+        marker.on('popupopen', () => {
+          const btn = document.getElementById('directionsBtn');
+          if (btn) {
+            btn.addEventListener('click', () => {
+              const osmUrl = `https://www.openstreetmap.org/directions?from=&to=${lat},${lon}`;
+              window.open(osmUrl, '_blank');
+            });
+          }
+        });
+
+      } catch (err) {
+        console.error(err);
+        setStatus('error during geocoding');
+        alert('Error while trying to geocode: ' + err.message);
+      }
+    }
+
+    // On initial load, attempt to geocode the address provided by user
+    const input = document.getElementById('address');
+    const goBtn = document.getElementById('go');
+    goBtn.addEventListener('click', () => {
+      const addr = input.value.trim();
+      if (!addr) { alert('Please provide an address.'); return; }
+      geocodeAndShow(addr);
+    });
+
+    // Perform initial geocode automatically
+    window.addEventListener('load', () => {
+      setTimeout(() => { geocodeAndShow(input.value); }, 250);
+    });
+
+    // Extra: let user click map to add a temporary marker
+    map.on('click', (e) => {
+      markerGroup.clearLayers();
+      const m = L.marker(e.latlng).addTo(markerGroup);
+      m.bindPopup(`Manual marker<br>lat: ${e.latlng.lat.toFixed(6)}<br>lon: ${e.latlng.lng.toFixed(6)}`).openPopup();
+      setStatus('manual marker placed');
+    });
+
+    // Small note about responsible use of Nominatim
+    console.log('This demo uses Nominatim for geocoding. For production use, respect Nominatim usage policy and consider an API key / proper server-side proxy if you will have high traffic.');
+  </script></body>
 </html>
